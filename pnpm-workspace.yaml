@@ -1,3 +1,18 @@
 packages:
-  - apps/*
+  - frontend
   - packages/*
+allowBuilds:
+  '3': true
+  '"': true
+  '@parcel/watcher': true
+  '[': true
+  ']': true
+  e: true
+  esbuild: true
+  i: true
+  l: true
+  q: true
+  s: true
+  t: true
+  unrs-resolver: true
+  vue-demi: true
