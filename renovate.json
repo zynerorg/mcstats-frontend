@@ -1,6 +1,6 @@
 {
   "extends": [
-    "github>nuxt/renovate-config-nuxt"
+    "config:nuxt"
   ],
   "lockFileMaintenance": {
     "enabled": true
@@ -8,6 +8,5 @@
   "packageRules": [{
     "matchDepTypes": ["resolutions"],
     "enabled": false
-  }],
-  "postUpdateOptions": ["pnpmDedupe"]
+  }]
 }
