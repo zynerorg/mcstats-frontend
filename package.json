@@ -3,7 +3,7 @@
     "dev": "pnpm --filter frontend dev",
     "build": "pnpm --filter frontend build",
     "preview": "pnpm --filter frontend preview",
-    "postinstall": "pnpm --filter frontend prepare",
+    "postinstall": "pnpm --filter frontend postinstall",
     "lint": "pnpm --filter frontend eslint .",
     "typecheck": "pnpm --filter frontend typecheck"
   }
