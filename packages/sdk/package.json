@@ -1,18 +1,24 @@
 {
-  "name": "@me/sdk",
-  "version": "1.0.0",
-  "description": "",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.33.0",
-  "devDependencies": {
-    "typescript": "^6.0.2"
-  },
-  "types": "types.d.ts",
-  "exports": {
-    ".": {
-      "types": "./types.d.ts"
+    "name": "@me/sdk",
+    "version": "1.0.0",
+    "description": "",
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "packageManager": "pnpm@10.33.0",
+    "scripts": {
+        "generate": "curl -s http://localhost:2456/openapi.json -o /tmp/openapi.json && openapi-generator-cli generate -i /tmp/openapi.json -g typescript-axios -o src/generated --skip-validate-spec",
+        "postinstall": "pnpm generate"
+    },
+    "devDependencies": {
+        "typescript": "^6.0.2"
+    },
+    "types": "src/generated/api.ts",
+    "exports": {
+        ".": "./src/generated/index.ts"
+    },
+    "dependencies": {
+        "@openapitools/openapi-generator-cli": "^2.31.1",
+        "axios": "^1.15.0"
     }
-  }
 }

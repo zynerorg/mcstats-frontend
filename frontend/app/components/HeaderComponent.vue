@@ -12,7 +12,7 @@ const items = ref<NavigationMenuItem[]>([
 </script>
 
 <template>
-  <UHeader>
+  <UHeader :toggle="false">
     <template #left>
       <AppLogo class="h-6 w-auto" />
     </template>
