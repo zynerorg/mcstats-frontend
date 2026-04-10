@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { type StatCategories, type PlayerStats, Configuration, DefaultApi } from '@me/sdk'
 
+const env = useRuntimeConfig()
+
 const configuration = new Configuration({
-  basePath: 'http://localhost:2456'
+  basePath: env.public.API_URL
 })
 const api = new DefaultApi(configuration)
 
