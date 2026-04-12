@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.output
+.data
+.nuxt
+.nitro
+.dist
+.cache
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.fleet/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.tsbuildinfo
+
+packages/sdk/src/generated/*
+packages/sdk/openapitools.json
