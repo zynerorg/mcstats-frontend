@@ -25,16 +25,6 @@ export default defineNuxtConfig({
         commaDangle: "never",
         braceStyle: "1tbs",
       },
-      rules: {
-        "@stylistic/quotes": "off",
-        "@stylistic/semi": "off",
-        "@stylistic/arrow-parens": "off",
-        "@stylistic/operator-linebreak": "off",
-        "vue/first-attribute-linebreak": "off",
-        "vue/html-indent": "off",
-        "vue/html-closing-bracket-newline": "off",
-        "vue/max-attributes-per-line": "off",
-      },
     },
   },
 });
