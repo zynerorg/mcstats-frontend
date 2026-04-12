@@ -1,30 +1,40 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint', '@nuxt/ui'],
+  modules: ["@nuxt/eslint", "@nuxt/ui", "@pinia/nuxt"],
   devtools: {
-    enabled: true
+    enabled: true,
   },
 
-  css: ['~/assets/css/main.css'],
+  css: ["~/assets/css/main.css"],
 
   runtimeConfig: {
     public: {
-      API_URL: process.env.API_URL
-    }
+      API_URL: process.env.API_URL,
+    },
   },
 
   routeRules: {
-    '/': { prerender: true }
+    "/": { prerender: true },
   },
 
-  compatibilityDate: '2025-01-15',
+  compatibilityDate: "2025-01-15",
 
   eslint: {
     config: {
       stylistic: {
-        commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
-    }
-  }
-})
+        commaDangle: "never",
+        braceStyle: "1tbs",
+      },
+      rules: {
+        "@stylistic/quotes": "off",
+        "@stylistic/semi": "off",
+        "@stylistic/arrow-parens": "off",
+        "@stylistic/operator-linebreak": "off",
+        "vue/first-attribute-linebreak": "off",
+        "vue/html-indent": "off",
+        "vue/html-closing-bracket-newline": "off",
+        "vue/max-attributes-per-line": "off",
+      },
+    },
+  },
+});

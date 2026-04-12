@@ -1,7 +1,7 @@
-@import "tailwindcss";
-@import "@nuxt/ui";
+@import 'tailwindcss';
+@import '@nuxt/ui';
 
 @theme static {
-  --font-sans: "JetbrainsMono NF", sans-serif;
-  --font-mono: "JetbrainsMono NFM", monospace;
+  --font-sans: 'JetbrainsMono NF', sans-serif;
+  --font-mono: 'JetbrainsMono NFM', monospace;
 }
