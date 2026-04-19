@@ -35,25 +35,3 @@ export function createUuidTransformer(addToField: string) {
     };
   };
 }
-
-export async function batchUuidToName(
-  uuids: string[],
-  fallback = "",
-): Promise<Record<string, string>> {
-  const promises = uuids.map((uuid) => uuidToName(uuid, fallback));
-  const names = await Promise.all(promises);
-  return Object.fromEntries(
-    uuids.map((uuid, i) => [uuid, names[i] ?? fallback]),
-  );
-}
-
-export function createNameColumn(fieldKey: string, header = "Player") {
-  return {
-    accessorKey: fieldKey,
-    header,
-    cell: (info: { row: { original: Record<string, unknown> } }) => {
-      const row = info.row.original;
-      return row[fieldKey] ?? row.playerUuid;
-    },
-  };
-}
