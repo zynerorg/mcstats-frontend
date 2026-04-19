@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from "#ui/types";
 
-const tables = ref<NavigationMenuItem[]>([
+const tables = useState<NavigationMenuItem[]>("sidebar-tables", () => [
   {
     label: "Players",
     to: "/players",
@@ -9,6 +9,14 @@ const tables = ref<NavigationMenuItem[]>([
   {
     label: "Categories",
     to: "/categories",
+  },
+  {
+    label: "Items",
+    to: "/items",
+  },
+  {
+    label: "Statistics",
+    to: "/statistics",
   },
 ]);
 </script>

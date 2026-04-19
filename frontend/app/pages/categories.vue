@@ -1,62 +1,53 @@
 <script setup lang="ts">
-import type { PlayerStat } from "@me/sdk";
+import type { TableColumn } from "#ui/types";
+import type { StatCategory } from "@me/sdk";
+import { useDataTable } from "~/composables/useDataTable";
 
 const app = useAppStore();
 
-const categories = await app.api.categories();
-const selectedCategory = ref(categories.data[0]);
-
-const players = await app.api.players();
-players.data.splice(0, 0, { name: "None", playerUuid: "None" });
-const selectedPlayer = ref(players.data[0]);
-
-const data = ref<PlayerStat[]>();
-
-async function fetchData(
-  category: typeof selectedCategory.value,
-  player: typeof selectedPlayer.value,
-) {
-  if (!category) return;
-
-  if (player?.name === "None" || !player) {
-    data.value = (await app.api.category(category.name)).data;
-  } else {
-    data.value = (
-      await app.api.playerByCategory(player.playerUuid, category.name)
-    ).data;
-  }
-}
-
-onMounted(() => {
-  fetchData(selectedCategory.value, selectedPlayer.value);
+const { data, isLoading, error } = useDataTable<StatCategory>({
+  filters: [],
+  onFetch: async () => {
+    const response = await app.api.categories();
+    return { data: response.data as unknown as StatCategory[] };
+  },
 });
 
-watch([selectedCategory, selectedPlayer], ([newCategory, newPlayer]) => {
-  fetchData(newCategory, newPlayer);
-});
+const columns: TableColumn<Record<string, unknown>>[] = [
+  {
+    accessorKey: "name",
+    header: "Category Name",
+  },
+];
 </script>
 
 <template>
   <div>
     <UContainer>
-      <UContainer class="mt-6">
-        <UTable :data="data" />
-      </UContainer>
-    </UContainer>
+      <TableHeader
+        title="Categories"
+        description="Available Statistics categories"
+      />
 
-    <Teleport to="#sidebar">
-      <div class="flex flex-col gap-4">
-        <UInputMenu
-          v-model="selectedCategory"
-          :items="categories.data"
-          label-key="name"
-        />
-        <UInputMenu
-          v-model="selectedPlayer"
-          :items="players.data"
-          label-key="name"
-        />
-      </div>
-    </Teleport>
+      <DynamicTable
+        :data="data"
+        :columns="columns"
+        :is-loading="isLoading"
+        :error="error"
+      >
+        <template #name-cell="{ cell }">
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <span class="font-semibold">{{ cell.getValue() }}</span>
+          </div>
+        </template>
+
+        <template #empty>
+          <div class="text-center py-12">
+            <p class="text-gray-500">No categories available</p>
+          </div>
+        </template>
+      </DynamicTable>
+    </UContainer>
   </div>
 </template>
