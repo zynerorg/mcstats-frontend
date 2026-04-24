@@ -1,33 +1,23 @@
 <script setup lang="ts">
-import type { TableColumn } from "#ui/types";
-import { useApi } from "~/composables/useApi";
-import { useDataTable } from "~/composables/useDataTable";
-import { createUuidTransformer } from "~/utils/dataTransformers";
-
+const { t } = useI18n();
 const api = useApi();
 const transformer = useTransformerStore();
-transformer.loadCategories();
 
-const categoriesResponse = await api.categories();
-const categories = [...categoriesResponse.data];
-categories.splice(0, 0, { id: -1, name: "None" });
-const selectedCategory = ref(
-  categories.find((p: { name: string }) => p.name === "None") ?? null,
-);
+void transformer.loadCategories();
 
-const itemsResponse = await api.items();
-const items = [...itemsResponse.data];
-items.splice(0, 0, { id: -1, name: "None" });
-const selectedItem = ref(
-  items.find((p: { name: string }) => p.name === "None") ?? null,
-);
+const [categoriesRes, itemsRes, playersRes] = await Promise.all([
+  api.categories(),
+  api.items(),
+  api.players(),
+]);
 
-const playersResponse = await api.players();
-const players = [...playersResponse.data];
-players.splice(0, 0, { name: "None", playerUuid: "None" });
-const selectedPlayer = ref(
-  players.find((p: { name: string }) => p.name === "None") ?? null,
-);
+const categories = withNoneOption(categoriesRes.data);
+const items = withNoneOption(itemsRes.data);
+const players = withNoneOption(playersRes.data);
+
+const selectedCategory = ref(getDefaultNone(categories));
+const selectedItem = ref(getDefaultNone(items));
+const selectedPlayer = ref(getDefaultNone(players));
 
 const { data, page, maxPage, isLoading, error, filters } = useDataTable({
   filters: [
@@ -53,52 +43,43 @@ const { data, page, maxPage, isLoading, error, filters } = useDataTable({
       modelValue: selectedItem,
     },
   ],
-  onFetch: async (filterValues, pageNum) => {
-    const category = filterValues.category as { name: string } | undefined;
-    const item = filterValues.item as { name: string } | null | undefined;
-    const player = filterValues.player as
-      | { name: string; playerUuid: string }
-      | null
-      | undefined;
 
-    const categoryName =
-      category && category.name !== "None" ? category.name : undefined;
-    const itemName = item && item.name !== "None" ? item.name : undefined;
-    const playerUuid =
-      player && player.name !== "None" ? player.playerUuid : undefined;
+  onFetch: async (filterValues, pageNum) => {
+    const { category, item, player_uuid } = normalizeStatsFilters(filterValues);
 
     const response = await api.stats({
-      item: itemName,
-      category: categoryName,
-      player_uuid: playerUuid,
+      category,
+      item,
+      player_uuid,
       limit: 25,
       page: pageNum,
     });
+
     return { data: response.data as any };
   },
-  onTransform: createUuidTransformer("playerName") as any,
+
+  onTransform: createUuidTransformer("playerName"),
 });
 
-const columns: TableColumn<Record<string, unknown>>[] = [
+const columns = computed(() => [
   {
     accessorKey: "playerName",
-    header: "Player",
+    header: t("stats.player"),
   },
   {
-    accessorFn: (row) => {
-      return transformer.getCategoryNameById(row.statCategoriesId as number);
-    },
-    header: "Category",
+    accessorFn: (row) =>
+      transformer.getCategoryNameById(row.statCategoriesId as number),
+    header: t("stats.category"),
   },
   {
     accessorKey: "statName",
-    header: "Type",
+    header: t("stats.type"),
   },
   {
     accessorKey: "value",
-    header: "Value",
+    header: t("stats.value"),
   },
-];
+]);
 
 function handlePageUpdate(newPage: number) {
   page.value = newPage;
@@ -108,7 +89,7 @@ function handlePageUpdate(newPage: number) {
 <template>
   <div>
     <UContainer>
-      <TableHeader title="Statistics" />
+      <TableHeader :title="t('stats.title')" />
 
       <DynamicTable
         :data="data as any"
@@ -127,7 +108,9 @@ function handlePageUpdate(newPage: number) {
         </template>
 
         <template #value-cell="{ cell }">
-          <span class="font-mono font-semibold">{{ cell.getValue() }}</span>
+          <span class="font-mono font-semibold">
+            {{ cell.getValue() }}
+          </span>
         </template>
       </DynamicTable>
     </UContainer>

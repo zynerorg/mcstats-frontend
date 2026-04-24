@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxt/eslint", "@nuxt/ui", "@pinia/nuxt"],
+  modules: ["@nuxt/eslint", "@nuxt/ui", "@pinia/nuxt", "@nuxtjs/i18n"],
   ssr: false,
   devtools: {
     enabled: true,
@@ -22,5 +22,13 @@ export default defineNuxtConfig({
         braceStyle: "1tbs",
       },
     },
+  },
+
+  i18n: {
+    defaultLocale: "en",
+    locales: [
+      { code: "en", name: "English", file: "en.json" },
+      { code: "sv", name: "Svenska", file: "sv.json" },
+    ],
   },
 });

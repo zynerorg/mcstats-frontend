@@ -1,0 +1,9 @@
+{
+  "stats": {
+    "title": "Statistics",
+    "player": "Player",
+    "category": "Category",
+    "type": "Type",
+    "value": "Value"
+  }
+}
