@@ -1,23 +1,33 @@
 <script setup lang="ts">
 import type { TableColumn } from "#ui/types";
+import { useApi } from "~/composables/useApi";
 import { useDataTable } from "~/composables/useDataTable";
 import { createUuidTransformer } from "~/utils/dataTransformers";
 
-const app = useAppStore();
+const api = useApi();
 const transformer = useTransformerStore();
 transformer.loadCategories();
 
-const categories = (await app.api.categories()).data;
+const categoriesResponse = await api.getMinecraftStatsAPI().categories();
+const categories = [...categoriesResponse.data];
 categories.splice(0, 0, { id: -1, name: "None" });
-const selectedCategory = ref(categories.find((p) => p.name === "None") ?? null);
+const selectedCategory = ref(
+  categories.find((p: { name: string }) => p.name === "None") ?? null,
+);
 
-const items = (await app.api.items()).data;
+const itemsResponse = await api.getMinecraftStatsAPI().items();
+const items = [...itemsResponse.data];
 items.splice(0, 0, { id: -1, name: "None" });
-const selectedItem = ref(items.find((p) => p.name === "None") ?? null);
+const selectedItem = ref(
+  items.find((p: { name: string }) => p.name === "None") ?? null,
+);
 
-const players = (await app.api.players()).data;
+const playersResponse = await api.getMinecraftStatsAPI().players();
+const players = [...playersResponse.data];
 players.splice(0, 0, { name: "None", playerUuid: "None" });
-const selectedPlayer = ref(players.find((p) => p.name === "None") ?? null);
+const selectedPlayer = ref(
+  players.find((p: { name: string }) => p.name === "None") ?? null,
+);
 
 const { data, page, maxPage, isLoading, error, filters } = useDataTable({
   filters: [
@@ -57,13 +67,13 @@ const { data, page, maxPage, isLoading, error, filters } = useDataTable({
     const playerUuid =
       player && player.name !== "None" ? player.playerUuid : undefined;
 
-    const response = await app.api.stats(
-      itemName,
-      categoryName,
-      playerUuid,
-      25,
-      pageNum,
-    );
+    const response = await api.getMinecraftStatsAPI().stats({
+      item: itemName,
+      category: categoryName,
+      player_uuid: playerUuid,
+      limit: 25,
+      page: pageNum,
+    });
     return { data: response.data as any };
   },
   onTransform: createUuidTransformer("playerName") as any,
