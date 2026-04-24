@@ -6,7 +6,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare && pnpm generate:api",
+    "postinstall": "nuxt prepare",
     "generate:api": "orval",
     "lint": "eslint .",
     "format": "eslint . --fix",

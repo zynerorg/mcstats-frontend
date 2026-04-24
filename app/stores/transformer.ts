@@ -7,7 +7,7 @@ export const useTransformerStore = defineStore("transformer", () => {
   const categoryMap = ref<Record<number, string>>({});
 
   async function loadCategories() {
-    const response = await api.getMinecraftStatsAPI().categories();
+    const response = await api.categories();
     categoryMap.value = Object.fromEntries(
       response.data.map((c) => [c.id, c.name]),
     );

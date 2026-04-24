@@ -10,5 +10,19 @@ services:
       - PORT=3000
       - NITRO_HOST=0.0.0.0
       - NITRO_PORT=3000
-      - API_URL="http://localhost:2456"
+      - NUXT_PUBLIC_API_URL=http://0.0.0.0:2456
     restart: unless-stopped
+    depends_on:
+      - backend
+
+  backend:
+    image: ghcr.io/zynerorg/mcstats-backend
+    environment:
+      - PORT=2456
+      - DATABASE_URL=sqlite://data/mcstats.db
+    volumes:
+      - ./data/world:/app/data/world
+      - ./data/usercache.json:/app/data/usercache.json
+    restart: unless-stopped
+    ports:
+      - 2456:2456

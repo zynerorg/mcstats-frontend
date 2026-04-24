@@ -6,7 +6,5 @@ export const useApi = () => {
   const axiosInstance = axios.create({
     baseURL: config.public.API_URL,
   });
-  return {
-    getMinecraftStatsAPI: () => api.getMinecraftStatsAPI(axiosInstance),
-  };
+  return api.getMinecraftStatsAPI(axiosInstance);
 };

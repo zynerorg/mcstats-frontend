@@ -8,21 +8,21 @@ const api = useApi();
 const transformer = useTransformerStore();
 transformer.loadCategories();
 
-const categoriesResponse = await api.getMinecraftStatsAPI().categories();
+const categoriesResponse = await api.categories();
 const categories = [...categoriesResponse.data];
 categories.splice(0, 0, { id: -1, name: "None" });
 const selectedCategory = ref(
   categories.find((p: { name: string }) => p.name === "None") ?? null,
 );
 
-const itemsResponse = await api.getMinecraftStatsAPI().items();
+const itemsResponse = await api.items();
 const items = [...itemsResponse.data];
 items.splice(0, 0, { id: -1, name: "None" });
 const selectedItem = ref(
   items.find((p: { name: string }) => p.name === "None") ?? null,
 );
 
-const playersResponse = await api.getMinecraftStatsAPI().players();
+const playersResponse = await api.players();
 const players = [...playersResponse.data];
 players.splice(0, 0, { name: "None", playerUuid: "None" });
 const selectedPlayer = ref(
@@ -67,7 +67,7 @@ const { data, page, maxPage, isLoading, error, filters } = useDataTable({
     const playerUuid =
       player && player.name !== "None" ? player.playerUuid : undefined;
 
-    const response = await api.getMinecraftStatsAPI().stats({
+    const response = await api.stats({
       item: itemName,
       category: categoryName,
       player_uuid: playerUuid,
