@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { FilterConfig } from "~/composables/useDataTable";
 
+const { t } = useI18n();
+
 defineProps<{
   filters: FilterConfig[];
   maxPage?: number;
@@ -23,7 +25,7 @@ function emitPageUpdate(value: number) {
       <label
         class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
       >
-        Page
+        {{ t("filters.page") }}
       </label>
       <UInputNumber
         v-model="pageValue"
@@ -50,7 +52,7 @@ function emitPageUpdate(value: number) {
       <UInput
         v-else-if="filter.type === 'input'"
         v-model="filter.modelValue.value as string"
-        placeholder="Enter value..."
+        :placeholder="t('filters.enterValue')"
       />
     </div>
   </div>

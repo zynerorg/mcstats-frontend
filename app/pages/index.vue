@@ -11,33 +11,33 @@ const [categoriesRes, itemsRes, playersRes] = await Promise.all([
   api.players(),
 ]);
 
-const categories = withNoneOption(categoriesRes.data);
-const items = withNoneOption(itemsRes.data);
-const players = withNoneOption(playersRes.data);
+const categories = withNoneOption(categoriesRes.data, t("common.none"));
+const items = withNoneOption(itemsRes.data, t("common.none"));
+const players = withNoneOption(playersRes.data, t("common.none"));
 
-const selectedCategory = ref(getDefaultNone(categories));
-const selectedItem = ref(getDefaultNone(items));
-const selectedPlayer = ref(getDefaultNone(players));
+const selectedCategory = ref(getDefaultNone(categories, t("common.none")));
+const selectedItem = ref(getDefaultNone(items, t("common.none")));
+const selectedPlayer = ref(getDefaultNone(players, t("common.none")));
 
-const { data, page, maxPage, isLoading, error, filters } = useDataTable({
+const { data, page, maxPage, filters } = useDataTable({
   filters: [
     {
       key: "player",
-      label: "Player",
+      label: t("filters.player"),
       type: "select",
       items: players,
       modelValue: selectedPlayer,
     },
     {
       key: "category",
-      label: "Category",
+      label: t("filters.category"),
       type: "select",
       items: categories,
       modelValue: selectedCategory,
     },
     {
       key: "item",
-      label: "Item",
+      label: t("filters.item"),
       type: "select",
       items: items,
       modelValue: selectedItem,
@@ -67,8 +67,13 @@ const columns = computed(() => [
     header: t("stats.player"),
   },
   {
-    accessorFn: (row) =>
-      transformer.getCategoryNameById(row.statCategoriesId as number),
+    accessorFn: (row) => {
+      const categoryName = transformer.getCategoryNameById(
+        row.statCategoriesId as number,
+      );
+      const translated = t(`categories.${categoryName}`) || categoryName;
+      return translated;
+    },
     header: t("stats.category"),
   },
   {
@@ -91,12 +96,7 @@ function handlePageUpdate(newPage: number) {
     <UContainer>
       <TableHeader :title="t('stats.title')" />
 
-      <DynamicTable
-        :data="data as any"
-        :columns="columns"
-        :is-loading="isLoading"
-        :error="error"
-      >
+      <UTable :data="data" :columns="columns">
         <template #playerName-cell="{ cell }">
           <div class="flex items-center gap-3">
             <img
@@ -106,13 +106,7 @@ function handlePageUpdate(newPage: number) {
             <span>{{ cell.getValue() }}</span>
           </div>
         </template>
-
-        <template #value-cell="{ cell }">
-          <span class="font-mono font-semibold">
-            {{ cell.getValue() }}
-          </span>
-        </template>
-      </DynamicTable>
+      </UTable>
     </UContainer>
 
     <ClientOnly>

@@ -5,5 +5,29 @@
     "category": "Kategori",
     "type": "Typ",
     "value": "Värde"
+  },
+  "filters": {
+    "player": "Spelare",
+    "category": "Kategori",
+    "item": "Föremål",
+    "page": "Sida",
+    "enterValue": "Ange värde..."
+  },
+  "common": {
+    "none": "Ingen"
+  },
+  "errors": {
+    "fetchFailed": "Misslyckades hämta data"
+  },
+  "categories": {
+    "minecraft:picked_up": "Plockat upp",
+    "minecraft:custom": "Annat",
+    "minecraft:broken": "Använt sönder",
+    "minecraft:mined": "Brutit",
+    "minecraft:dropped": "Kastat",
+    "minecraft:crafted": "Tillverkat",
+    "minecraft:killed_by": "Dödats av",
+    "minecraft:killed": "Dödat",
+    "minecraft:used": "Använt"
   }
 }

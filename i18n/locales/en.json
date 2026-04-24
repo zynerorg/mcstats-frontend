@@ -5,5 +5,29 @@
     "category": "Category",
     "type": "Type",
     "value": "Value"
+  },
+  "filters": {
+    "player": "Player",
+    "category": "Category",
+    "item": "Item",
+    "page": "Page",
+    "enterValue": "Enter value..."
+  },
+  "common": {
+    "none": "None"
+  },
+  "errors": {
+    "fetchFailed": "Failed to fetch data"
+  },
+  "categories": {
+    "minecraft:picked_up": "Picked up",
+    "minecraft:custom": "Other",
+    "minecraft:broken": "Broken",
+    "minecraft:mined": "Mined",
+    "minecraft:dropped": "Dropped",
+    "minecraft:crafted": "Crafted",
+    "minecraft:killed_by": "Killed By",
+    "minecraft:killed": "Killed",
+    "minecraft:used": "Used"
   }
 }
