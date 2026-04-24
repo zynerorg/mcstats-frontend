@@ -33,6 +33,3 @@ Thumbs.db
 
 # Misc
 *.tsbuildinfo
-
-packages/sdk/src/generated/*
-packages/sdk/openapitools.json
