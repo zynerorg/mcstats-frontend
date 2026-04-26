@@ -29,5 +29,17 @@
     "minecraft:killed_by": "Dödats av",
     "minecraft:killed": "Dödat",
     "minecraft:used": "Använt"
+  },
+  "statName": {
+    "minecraft:aviate_one_cm": "Flyga med elytra",
+    "minecraft:fly_one_cm": "Flyga"
+  },
+  "footer": {
+    "copyright": "Upphovsrätt",
+    "madeBy": "Gjord av"
+  },
+  "settings": {
+    "title": "Inställningar",
+    "language": "Språk"
   }
 }

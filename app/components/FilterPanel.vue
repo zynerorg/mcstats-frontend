@@ -46,7 +46,8 @@ function emitPageUpdate(value: number) {
         v-if="filter.type === 'select'"
         v-model="filter.modelValue.value"
         :items="(filter.items as any[]) || []"
-        label-key="name"
+        label-key="label"
+        value-key="value"
       />
 
       <UInput

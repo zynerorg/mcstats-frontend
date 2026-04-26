@@ -1,10 +1,12 @@
-import type { Ref } from "vue";
+import { ref, watch, onMounted, computed, type Ref } from "vue";
 
 export interface FilterConfig {
   key: string;
   label: string;
   type: "select" | "input";
   items?: unknown[];
+  accessorKey?: string;
+  valueKey?: string;
   modelValue: Ref<unknown>;
   [key: string]: unknown;
 }
@@ -16,10 +18,34 @@ interface FetchOptions<T> {
     page: number,
   ) => Promise<{ data: T[] }>;
   onTransform?: (item: T) => Promise<T>;
+  t?: (key: string) => string;
+}
+
+function normalizeItems(filter: FilterConfig) {
+  if (!filter.items) return [];
+
+  return filter.items.map((item) => {
+    if (typeof item === "object" && item !== null) {
+      const obj = item as Record<string, unknown>;
+
+      const label = filter.accessorKey
+        ? obj[filter.accessorKey]
+        : (obj.label ?? obj.name ?? obj);
+
+      const value = filter.valueKey ? obj[filter.valueKey] : item;
+
+      return { label: String(label), value };
+    }
+
+    return {
+      label: String(item),
+      value: item,
+    };
+  });
 }
 
 export function useDataTable<T>(options: FetchOptions<T>) {
-  const { filters, onFetch, onTransform } = options;
+  const { filters, onFetch, onTransform, t } = options;
 
   const page = ref(1);
   const data = ref<T[]>([]);
@@ -29,18 +55,33 @@ export function useDataTable<T>(options: FetchOptions<T>) {
 
   let requestId = 0;
 
+  function getLabel(filter: FilterConfig) {
+    if (t && filter.label.startsWith("filters.")) {
+      return t(filter.label);
+    }
+    return filter.label;
+  }
+
+  const normalizedFilters = computed(() =>
+    filters.map((f) => ({
+      ...f,
+      items: normalizeItems(f),
+      label: getLabel(f),
+    })),
+  );
+
   async function fetchData() {
     const id = ++requestId;
     isLoading.value = true;
     error.value = null;
 
     try {
-      const filterValues = filters.reduce(
+      const filterValues = normalizedFilters.value.reduce(
         (acc, filter) => {
           acc[filter.key] = filter.modelValue.value;
           return acc;
         },
-        {} as Record<string, any>,
+        {} as Record<string, unknown>,
       );
 
       const res = await onFetch(filterValues, page.value);
@@ -74,7 +115,7 @@ export function useDataTable<T>(options: FetchOptions<T>) {
     maxPage,
     isLoading,
     error,
-    filters,
+    filters: normalizedFilters,
     refetch: fetchData,
   };
 }

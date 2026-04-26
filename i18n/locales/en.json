@@ -29,5 +29,19 @@
     "minecraft:killed_by": "Killed By",
     "minecraft:killed": "Killed",
     "minecraft:used": "Used"
+  },
+  "statName": {
+    "minecraft:aviate_one_cm": "Fly with elytra",
+    "minecraft:fly_one_cm": "Fly",
+    "minecraft:sprint_one_cm": "Sprint",
+    "minecraft:play_time": "Playtime"
+  },
+  "footer": {
+    "copyright": "Copyright",
+    "madeBy": "Made by"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language"
   }
 }
