@@ -1,22 +1,13 @@
 <script setup lang="ts">
-import type { FilterConfig } from "~/composables/useDataTable";
+import type { Filter } from "~~/types/filter";
 
 const { t } = useI18n();
 
 defineProps<{
-  filters: FilterConfig[];
-  maxPage?: number;
+  filters: Filter[];
 }>();
 
-const pageValue = ref(1);
-
-const emit = defineEmits<{
-  "update:page": [value: number];
-}>();
-
-function emitPageUpdate(value: number) {
-  emit("update:page", value);
-}
+const page = ref(1);
 </script>
 
 <template>
@@ -27,12 +18,7 @@ function emitPageUpdate(value: number) {
       >
         {{ t("filters.page") }}
       </label>
-      <UInputNumber
-        v-model="pageValue"
-        :min="1"
-        :max="maxPage || 1000"
-        @update:model-value="emitPageUpdate"
-      />
+      <UInputNumber v-model="page" :min="1" />
     </div>
 
     <div v-for="filter in filters" :key="filter.key">
@@ -42,17 +28,10 @@ function emitPageUpdate(value: number) {
         {{ filter.label }}
       </label>
 
-      <UInputMenu
-        v-if="filter.type === 'select'"
-        v-model="filter.modelValue.value"
-        :items="(filter.items as any[]) || []"
-        label-key="label"
-        value-key="value"
-      />
+      <UInputMenu v-if="filter.type === 'select'" :items="filter.items || []" />
 
       <UInput
         v-else-if="filter.type === 'input'"
-        v-model="filter.modelValue.value as string"
         :placeholder="t('filters.enterValue')"
       />
     </div>

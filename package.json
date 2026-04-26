@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "mcstats-frontend",
   "private": true,
   "type": "module",
   "scripts": {
@@ -7,28 +7,34 @@
     "dev": "nuxt dev",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "generate:api": "orval",
     "lint": "eslint .",
     "format": "eslint . --fix",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt typecheck",
+    "generate:gql": "pnpm graphql-codegen --config codegen.yaml"
   },
   "dependencies": {
+    "@apollo/client": "3.10.7",
     "@iconify-json/lucide": "^1.2.103",
     "@iconify-json/simple-icons": "^1.2.79",
     "@nuxt/ui": "^4.7.0",
     "@nuxtjs/i18n": "10.3.0",
     "@pinia/nuxt": "0.11.3",
-    "axios": "^1.7.9",
+    "@vue/apollo-composable": "^4.2.2",
+    "graphql": "^16.13.2",
     "nuxt": "^4.4.2",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^6.3.1",
+    "@graphql-codegen/client-preset": "^5.3.0",
+    "@graphql-codegen/typescript-vue-apollo": "^5.0.1",
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/eslint-config": "^1.15.2",
+    "@types/react": "^19.2.14",
     "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
-    "orval": "^8.8.1",
+    "react": "^19.2.5",
     "typescript": "^6.0.3",
     "vue-tsc": "^3.2.7"
   },
