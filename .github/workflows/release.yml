@@ -1,93 +1,85 @@
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
-    workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-    test:
-        runs-on: ${{ matrix.os }}
+  test:
+    runs-on: ${{ matrix.os }}
 
-        strategy:
-            matrix:
-                os: [ubuntu-latest]
-                node: [22]
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [22]
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
 
-            - name: Install pnpm
-              uses: pnpm/action-setup@v6
-              with:
-                  version: 10
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
 
-            - name: Install node
-              uses: actions/setup-node@v6
-              with:
-                  node-version: ${{ matrix.node }}
-                  cache: "pnpm"
+      - name: Install node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node }}
+          cache: "pnpm"
 
-            - name: Setup Java
-              uses: actions/setup-java@v5
-              with:
-                  distribution: temurin
-                  java-version: 21
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+      - name: Prepare Nuxt
+        run: pnpm --filter frontend postinstall
 
-            - name: Prepare Nuxt
-              run: pnpm --filter frontend postinstall
+      - name: Lint
+        run: pnpm --filter frontend run lint
 
-            - name: Lint
-              run: pnpm --filter frontend run lint
+      - name: Typecheck
+        run: pnpm --filter frontend run typecheck
 
-            - name: Typecheck
-              run: pnpm --filter frontend run typecheck
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v6
 
-    build:
-        runs-on: ubuntu-latest
-        needs: test
-        steps:
-            - uses: actions/checkout@v6
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: |
+            ghcr.io/zynerorg/mcstats-frontend
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
 
-            - name: Docker meta
-              id: meta
-              uses: docker/metadata-action@v6
-              with:
-                  images: |
-                      ghcr.io/zynerorg/mcstats-frontend
-                  tags: |
-                      type=raw,value=latest,enable={{is_default_branch}}
-                      type=schedule
-                      type=ref,event=branch
-                      type=ref,event=pr
-                      type=semver,pattern={{version}}
-                      type=semver,pattern={{major}}.{{minor}}
-                      type=semver,pattern={{major}}
-                      type=sha
+      - name: Login to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Login to GHCR
-              if: github.event_name != 'pull_request'
-              uses: docker/login-action@v4
-              with:
-                  registry: ghcr.io
-                  username: ${{ github.repository_owner }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
 
-            - name: Set up QEMU
-              uses: docker/setup-qemu-action@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
 
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v4
-
-            - name: Build and push
-              uses: docker/build-push-action@v7
-              with:
-                  push: ${{ github.event_name != 'pull_request' }}
-                  tags: ${{ steps.meta.outputs.tags }}
-                  labels: ${{ steps.meta.outputs.labels }}
-                  cache-from: type=gha
-                  cache-to: type=gha,mode=max
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
