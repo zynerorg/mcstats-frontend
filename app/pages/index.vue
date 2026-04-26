@@ -119,7 +119,13 @@ const columns = computed(() => [
   },
   {
     accessorFn: (row: PlayerStat) => {
-      if (row.statName.endsWith("one_cm")) return row.value / 100;
+      if (row.statName.endsWith("one_cm"))
+        return row.value / 100 + " " + t("common.meters");
+
+      if (row.statName.toLowerCase().includes("time")) {
+        const TICKS_PER_SECOND = 20;
+        return row.value / TICKS_PER_SECOND / 60 / 60 + " " + t("common.hours");
+      }
     },
     header: t("stats.value"),
   },

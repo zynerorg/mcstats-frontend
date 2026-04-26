@@ -14,7 +14,9 @@
     "enterValue": "Ange värde..."
   },
   "common": {
-    "none": "Ingen"
+    "none": "Ingen",
+    "meters": "Meter",
+    "hours": "Timmar"
   },
   "errors": {
     "fetchFailed": "Misslyckades hämta data"

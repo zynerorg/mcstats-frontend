@@ -14,7 +14,9 @@
     "enterValue": "Enter value..."
   },
   "common": {
-    "none": "None"
+    "none": "None",
+    "meters": "Meters",
+    "hours": "Hours"
   },
   "errors": {
     "fetchFailed": "Failed to fetch data"
@@ -34,7 +36,9 @@
     "minecraft:aviate_one_cm": "Fly with elytra",
     "minecraft:fly_one_cm": "Fly",
     "minecraft:sprint_one_cm": "Sprint",
-    "minecraft:play_time": "Playtime"
+    "minecraft:play_time": "Playtime",
+    "minecraft:boat_one_cm": "Drive with boat",
+    "minecraft:walk_one_cm": "Walk"
   },
   "footer": {
     "copyright": "Copyright",
