@@ -25,6 +25,21 @@ export async function uuidToName(uuid: string): Promise<string> {
 }
 
 export function nameToUuid(name: string): Promise<string> {
-  return fetchHelper(nameToUuidCache, "/api/name-to-uuid?name=", name, "id")
-    .then(uuid => uuid.slice(0, 8) + "-" + uuid.slice(8, 12) + "-" + uuid.slice(12, 16) + "-" + uuid.slice(16, 20) + "-" + uuid.slice(20));
+  return fetchHelper(
+    nameToUuidCache,
+    "/api/name-to-uuid?name=",
+    name,
+    "id",
+  ).then(
+    (uuid) =>
+      uuid.slice(0, 8) +
+      "-" +
+      uuid.slice(8, 12) +
+      "-" +
+      uuid.slice(12, 16) +
+      "-" +
+      uuid.slice(16, 20) +
+      "-" +
+      uuid.slice(20),
+  );
 }

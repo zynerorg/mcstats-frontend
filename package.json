@@ -17,11 +17,11 @@
     "@iconify-json/lucide": "^1.2.103",
     "@iconify-json/simple-icons": "^1.2.79",
     "@nuxt/ui": "^4.7.0",
-    "@nuxtjs/i18n": "10.3.0",
     "@pinia/nuxt": "0.11.3",
     "@vue/apollo-composable": "^4.2.2",
     "graphql": "^16.13.2",
     "nuxt": "^4.4.2",
+    "react": "^19.2.5",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
@@ -34,7 +34,6 @@
     "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
-    "react": "^19.2.5",
     "typescript": "^6.0.3",
     "vue-tsc": "^3.2.7"
   },

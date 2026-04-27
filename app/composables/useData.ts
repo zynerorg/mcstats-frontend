@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, ref, toValue, watch, type MaybeRefOrGetter } from "vue";
+import { useRoute } from "vue-router";
 import type { Filter } from "~~/types/filter";
 import type { StatsFilterInput, StatsQuery } from "~~/types/graphql";
 import { nameToUuid } from "~/utils/names";
@@ -95,6 +96,14 @@ export const useData = (filters: MaybeRefOrGetter<Filter[]>) => {
   watch(playerUuid, () => {
     refetch();
   });
+
+  // Refetch when route changes (locale changes trigger route updates)
+  watch(
+    () => useRoute().fullPath,
+    () => {
+      setTimeout(() => refetch(), 50);
+    },
+  );
 
   return {
     tableData,

@@ -4,8 +4,6 @@ import type { Filter } from "~~/types/filter";
 import { withNoneOption } from "~/utils/selectWithNone";
 import { uuidToName } from "~/utils/names";
 
-const { t, te } = useI18n();
-
 const playersResult = usePlayers().result;
 const categoriesResult = useCategories().result;
 const itemsResult = useItems().result;
@@ -16,7 +14,7 @@ const players = computed(() =>
       label: p.name,
       value: p.name,
     })),
-    t("common.none"),
+    "None",
   ),
 );
 
@@ -26,7 +24,7 @@ const categories = computed(() =>
       label: translateCategory(c),
       value: c,
     })),
-    t("common.none"),
+    "None",
   ),
 );
 
@@ -36,7 +34,7 @@ const items = computed(() =>
       label: formatItem(i),
       value: i,
     })),
-    t("common.none"),
+    "None",
   ),
 );
 
@@ -49,8 +47,7 @@ watch(
   (newPlayers) => {
     if (!selectedPlayer.value && newPlayers.length > 0) {
       selectedPlayer.value =
-        newPlayers.find((p: any) => p.label === t("common.none")) ||
-        newPlayers[0];
+        newPlayers.find((p: any) => p.label === "None") || newPlayers[0];
     }
   },
   { immediate: true },
@@ -61,8 +58,7 @@ watch(
   (newCategories) => {
     if (!selectedCategory.value && newCategories.length > 0) {
       selectedCategory.value =
-        newCategories.find((c: any) => c.label === t("common.none")) ||
-        newCategories[0];
+        newCategories.find((c: any) => c.label === "None") || newCategories[0];
     }
   },
   { immediate: true },
@@ -73,23 +69,43 @@ watch(
   (newItems) => {
     if (!selectedItem.value && newItems.length > 0) {
       selectedItem.value =
-        newItems.find((i: any) => i.label === t("common.none")) || null;
+        newItems.find((i: any) => i.label === "None") || null;
     }
   },
   { immediate: true },
 );
 
+const categoryTranslations: Record<string, string> = {
+  "minecraft:picked_up": "Picked up",
+  "minecraft:custom": "Other",
+  "minecraft:broken": "Broken",
+  "minecraft:mined": "Mined",
+  "minecraft:dropped": "Dropped",
+  "minecraft:crafted": "Crafted",
+  "minecraft:killed_by": "Killed By",
+  "minecraft:killed": "Killed",
+  "minecraft:used": "Used",
+};
+
+const statNameTranslations: Record<string, string> = {
+  "minecraft:aviate_one_cm": "Fly with elytra",
+  "minecraft:fly_one_cm": "Fly",
+  "minecraft:sprint_one_cm": "Sprint",
+  "minecraft:play_time": "Playtime",
+  "minecraft:boat_one_cm": "Drive with boat",
+  "minecraft:walk_one_cm": "Walk",
+};
+
 function translateCategory(name: string) {
   if (!name) return "";
-  const key = `categories.${name}`;
-  return te(key) ? t(key) : name;
+  return categoryTranslations[name] ?? name;
 }
 
 function formatItem(name: string) {
   if (!name) return "";
   if (!name.startsWith("minecraft:")) return name;
-  const s = `statName.${name}`;
-  if (te(s)) return t(s);
+  const translated = statNameTranslations[name];
+  if (translated) return translated;
   return name
     .slice(10)
     .split("_")
@@ -98,36 +114,36 @@ function formatItem(name: string) {
 }
 
 const orderTypes = computed(() => [
-  { label: t("filters.descending"), value: "desc" },
-  { label: t("filters.ascending"), value: "asc" },
+  { label: "Descending", value: "desc" },
+  { label: "Ascending", value: "asc" },
 ]);
 const selectedOrder = ref(orderTypes.value[0]);
 
 const staticFilters = computed<Filter[]>(() => [
   {
     key: "playerUuid",
-    label: t("filters.player"),
+    label: "Player",
     type: "select",
     items: players.value,
     modelValue: selectedPlayer,
   },
   {
     key: "category",
-    label: t("filters.category"),
+    label: "Category",
     type: "select",
     items: categories.value,
     modelValue: selectedCategory,
   },
   {
     key: "item",
-    label: t("filters.item"),
+    label: "Item",
     type: "select",
     items: items.value,
     modelValue: selectedItem,
   },
   {
     key: "order",
-    label: t("stats.order"),
+    label: "Order",
     type: "select",
     items: orderTypes.value,
     modelValue: selectedOrder,
@@ -163,32 +179,28 @@ function handlePageUpdate(newPage: number) {
 const columns = computed(() => [
   {
     accessorKey: "playerName",
-    header: t("stats.player"),
+    header: "Player",
   },
   {
     accessorKey: "category",
-    header: t("stats.category"),
+    header: "Category",
     cell: ({ row }: any) => translateCategory(row.original.category),
   },
   {
     accessorKey: "valueName",
-    header: t("stats.type"),
+    header: "Type",
     cell: ({ row }: any) => formatItem(row.original.valueName),
   },
   {
     accessorKey: "value",
-    header: t("stats.value"),
+    header: "Value",
     cell: ({ row }: any) => {
       const r = row.original;
       if (r.valueName?.endsWith("one_cm"))
-        return (r.value / 100).toFixed(2) + " " + t("common.meters");
+        return (r.value / 100).toFixed(2) + " Meters";
       if (r.valueName?.toLowerCase().includes("time")) {
         const TICKS_PER_SECOND = 20;
-        return (
-          (r.value / TICKS_PER_SECOND / 60 / 60).toFixed(2) +
-          " " +
-          t("common.hours")
-        );
+        return (r.value / TICKS_PER_SECOND / 60 / 60).toFixed(2) + " Hours";
       }
       return r.value;
     },

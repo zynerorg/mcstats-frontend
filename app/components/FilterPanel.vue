@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { Filter } from "~~/types/filter";
 
-const { t } = useI18n();
-
 defineProps<{
   filters: Filter[];
   maxPage?: number;
@@ -25,7 +23,7 @@ function onPageChange(newPage: number) {
       <label
         class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
       >
-        {{ t("filters.page") }}
+        Page
       </label>
       <UInputNumber
         v-model="page"
@@ -51,7 +49,7 @@ function onPageChange(newPage: number) {
       <UInput
         v-else-if="filter.type === 'input'"
         v-model="filter.modelValue.value"
-        :placeholder="t('filters.enterValue')"
+        placeholder="Enter value..."
       />
     </div>
   </div>
