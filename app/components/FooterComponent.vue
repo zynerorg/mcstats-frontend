@@ -1,18 +1,16 @@
-<script setup lang="ts">
-const { t } = useI18n();
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <UFooter>
     <template #left>
       <p class="text-muted text-sm">
-        {{ t("footer.copyright") }} © Zyner {{ new Date().getFullYear() }}
+        Copyright © Zyner {{ new Date().getFullYear() }}
       </p>
     </template>
 
     <template #right>
       <p class="text-muted text-sm">
-        {{ t("footer.madeBy") }}
+        Made by
         <ULink href="https://zyner.org" class="underline"> Zyner </ULink>
       </p>
     </template>

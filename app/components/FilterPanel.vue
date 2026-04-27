@@ -1,37 +1,34 @@
 <script setup lang="ts">
-import type { FilterConfig } from "~/composables/useDataTable";
-
-const { t } = useI18n();
+import type { Filter } from "~~/types/filter";
 
 defineProps<{
-  filters: FilterConfig[];
+  filters: Filter[];
   maxPage?: number;
 }>();
 
-const pageValue = ref(1);
-
 const emit = defineEmits<{
-  "update:page": [value: number];
+  (e: "update:page", page: number): void;
 }>();
 
-function emitPageUpdate(value: number) {
-  emit("update:page", value);
+const page = ref(1);
+
+function onPageChange(newPage: number) {
+  emit("update:page", newPage);
 }
 </script>
 
 <template>
   <div class="flex flex-col gap-4">
-    <div>
+    <div v-if="maxPage">
       <label
         class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
       >
-        {{ t("filters.page") }}
+        Page
       </label>
       <UInputNumber
-        v-model="pageValue"
+        v-model="page"
         :min="1"
-        :max="maxPage || 1000"
-        @update:model-value="emitPageUpdate"
+        @update:model-value="onPageChange"
       />
     </div>
 
@@ -45,15 +42,14 @@ function emitPageUpdate(value: number) {
       <UInputMenu
         v-if="filter.type === 'select'"
         v-model="filter.modelValue.value"
-        :items="(filter.items as any[]) || []"
-        label-key="label"
-        value-key="value"
+        :items="filter.items"
+        searchable
       />
 
       <UInput
         v-else-if="filter.type === 'input'"
-        v-model="filter.modelValue.value as string"
-        :placeholder="t('filters.enterValue')"
+        v-model="filter.modelValue.value"
+        placeholder="Enter value..."
       />
     </div>
   </div>

@@ -1,0 +1,9 @@
+schema: http://localhost:2456/graphql
+
+documents: ["app/**/*.ts", "app/**/*.vue"]
+
+generates:
+  types/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
