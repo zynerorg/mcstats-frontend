@@ -1,17 +1,19 @@
 {
   "stats": {
-    "title": "Statistik",
     "player": "Spelare",
     "category": "Kategori",
     "type": "Typ",
-    "value": "Värde"
+    "value": "Värde",
+    "order": "Sorteringssätt"
   },
   "filters": {
     "player": "Spelare",
     "category": "Kategori",
     "item": "Föremål",
     "page": "Sida",
-    "enterValue": "Ange värde..."
+    "enterValue": "Ange värde...",
+    "ascending": "Stigande",
+    "descending": "Fallande"
   },
   "common": {
     "none": "Ingen",

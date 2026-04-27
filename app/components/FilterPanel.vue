@@ -5,20 +5,33 @@ const { t } = useI18n();
 
 defineProps<{
   filters: Filter[];
+  maxPage?: number;
+}>();
+
+const emit = defineEmits<{
+  (e: "update:page", page: number): void;
 }>();
 
 const page = ref(1);
+
+function onPageChange(newPage: number) {
+  emit("update:page", newPage);
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-4">
-    <div>
+    <div v-if="maxPage">
       <label
         class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
       >
         {{ t("filters.page") }}
       </label>
-      <UInputNumber v-model="page" :min="1" />
+      <UInputNumber
+        v-model="page"
+        :min="1"
+        @update:model-value="onPageChange"
+      />
     </div>
 
     <div v-for="filter in filters" :key="filter.key">
@@ -28,10 +41,16 @@ const page = ref(1);
         {{ filter.label }}
       </label>
 
-      <UInputMenu v-if="filter.type === 'select'" :items="filter.items || []" />
+      <UInputMenu
+        v-if="filter.type === 'select'"
+        v-model="filter.modelValue.value"
+        :items="filter.items"
+        searchable
+      />
 
       <UInput
         v-else-if="filter.type === 'input'"
+        v-model="filter.modelValue.value"
         :placeholder="t('filters.enterValue')"
       />
     </div>

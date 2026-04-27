@@ -1,9 +1,9 @@
 import { gql } from "@apollo/client";
 import { useQuery } from "@vue/apollo-composable";
-import type { Get_PlayersQuery } from "~~/types/graphql";
+import type { PlayerQuery } from "~~/types/graphql";
 
 const GET_PLAYERS = gql`
-  query get_players {
+  query Player {
     players {
       name
     }
@@ -11,11 +11,11 @@ const GET_PLAYERS = gql`
 `;
 
 export const usePlayers = () => {
-  const { result, loading, error } = useQuery<Get_PlayersQuery>(GET_PLAYERS);
+  const { result, loading, error } = useQuery<PlayerQuery>(GET_PLAYERS);
 
   return {
-    players: result,
-    playersLoading: loading,
-    playersError: error,
+    result,
+    loading,
+    error,
   };
 };

@@ -1,17 +1,19 @@
 {
   "stats": {
-    "title": "Statistics",
     "player": "Player",
     "category": "Category",
     "type": "Type",
-    "value": "Value"
+    "value": "Value",
+    "order": "Order"
   },
   "filters": {
     "player": "Player",
     "category": "Category",
     "item": "Item",
     "page": "Page",
-    "enterValue": "Enter value..."
+    "enterValue": "Enter value...",
+    "ascending": "Ascending",
+    "descending": "Descending"
   },
   "common": {
     "none": "None",

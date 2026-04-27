@@ -1,3 +1,4 @@
+import type { Ref } from "vue";
 import type { InputMenuItem } from "@nuxt/ui";
 
 export type Filter = {
@@ -5,5 +6,5 @@ export type Filter = {
   label: string;
   items?: InputMenuItem[];
   type: "select" | "input";
-  modelValue: Ref<unknown>;
+  modelValue: Ref<any>;
 };
