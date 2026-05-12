@@ -13,7 +13,7 @@
     "generate:gql": "pnpm graphql-codegen --config codegen.yaml"
   },
   "dependencies": {
-    "@apollo/client": "3.10.7",
+    "@apollo/client": "3.14.1",
     "@iconify-json/lucide": "^1.2.103",
     "@iconify-json/simple-icons": "^1.2.79",
     "@nuxt/ui": "^4.7.0",
