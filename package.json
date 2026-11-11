@@ -25,9 +25,9 @@
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^6.3.1",
-    "@graphql-codegen/client-preset": "^5.3.0",
-    "@graphql-codegen/typescript-vue-apollo": "^5.0.1",
+    "@graphql-codegen/cli": "^8.0.0",
+    "@graphql-codegen/client-preset": "^7.0.0",
+    "@graphql-codegen/typescript-vue-apollo": "^6.0.0",
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/eslint-config": "^1.15.2",
     "@types/react": "^19.2.14",
